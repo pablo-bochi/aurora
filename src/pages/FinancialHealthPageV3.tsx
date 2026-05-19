@@ -5,6 +5,8 @@ import { PsychologicalProfileCard } from "../components/aurora/PsychologicalProf
 import { ScoreBreakdownCard } from "../components/aurora/ScoreBreakdownCard";
 import { SectionHeader } from "../components/aurora/SectionHeader";
 import { getCsvImportSession } from "../integrations/csv-import/csv-import-store";
+import { auroraMvpStateToAuroraUserState } from "../lib/aurora-mvp-adapter";
+import { loadAuroraMvpState } from "../lib/aurora-mvp-storage";
 import { calculateFinancialHealthScoreV3 } from "../lib/engines/financial-health-engine";
 import { auroraUserStateMock } from "../mocks/aurora-user-state";
 
@@ -33,7 +35,13 @@ const cardStyle: CSSProperties = {
 
 export default function FinancialHealthPageV3() {
   const importSession = getCsvImportSession();
-  const activeState = importSession.mode === "imported" ? importSession.consolidatedUserState : auroraUserStateMock;
+  const mvpState = loadAuroraMvpState();
+  const activeState =
+    importSession.mode === "imported"
+      ? importSession.consolidatedUserState
+      : mvpState
+        ? auroraMvpStateToAuroraUserState(mvpState)
+        : auroraUserStateMock;
   const score = calculateFinancialHealthScoreV3(activeState);
 
   const scoreSummary =
@@ -53,9 +61,17 @@ export default function FinancialHealthPageV3() {
     <main style={pageStyle}>
       <div style={contentStyle}>
         <SectionHeader
-          title={`Saúde financeira · ${score.totalScore}/100`}
+          title={`Score de Inteligência Financeira · ${score.totalScore}/100`}
           subtitle={`Resultado calculado por regras em três dimensões: ${score.psychologicalProfile.label}.`}
         />
+
+        <section style={cardStyle} aria-label="ScoreMeaning">
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>O que este score significa</h3>
+          <p style={{ margin: 0, color: "#3f5873", lineHeight: 1.55 }}>
+            Seu score não mede riqueza. Ele ajuda você a entender se sua relação com dinheiro está evoluindo de forma
+            mais consciente, sustentável e alinhada aos seus objetivos.
+          </p>
+        </section>
 
         {importSession.mode === "imported" ? (
           <section style={cardStyle} aria-label="ImportedDataInfo">

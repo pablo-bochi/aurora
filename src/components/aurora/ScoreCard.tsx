@@ -42,9 +42,13 @@ const messageStyle: CSSProperties = {
 export function ScoreCard({ score, bandLabel, message }: ScoreCardProps) {
   return (
     <article style={cardStyle}>
-      <p style={bandStyle}>Saúde financeira v3 · faixa {bandLabel}</p>
+      <p style={bandStyle}>Score de Inteligência Financeira · faixa {bandLabel}</p>
       <p style={scoreStyle}>{score}/100</p>
       <p style={messageStyle}>{message}</p>
+      <p style={messageStyle}>
+        Seu score não mede riqueza. Ele ajuda você a entender se sua relação com dinheiro está evoluindo de forma mais
+        consciente, sustentável e alinhada aos seus objetivos.
+      </p>
     </article>
   );
 }

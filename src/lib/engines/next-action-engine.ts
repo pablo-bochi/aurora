@@ -1,4 +1,6 @@
 import type { AuroraUserState } from "../../types/aurora-user-state";
+import { buildAuroraReservoirs } from "../aurora-mvp-adapter";
+import type { AuroraMvpState } from "../../types/aurora-mvp";
 
 export interface NextAction {
   title: string;
@@ -60,5 +62,60 @@ export function calculateNextAction(state: AuroraUserState): NextAction {
     message: "Mantenha sua rotina: acompanhe gastos, proteja limites e continue aportando nos objetivos.",
     ctaLabel: "Continuar",
     actionKey: "maintain_routine",
+  };
+}
+
+export function calculateMvpNextAction(state: AuroraMvpState | null): NextAction {
+  if (!state?.hasCompletedInitialSnapshot) {
+    return {
+      title: "Completar ponto de partida",
+      message: "Complete seu snapshot inicial para gerar uma leitura mais clara do seu fluxo financeiro.",
+      ctaLabel: "Completar snapshot",
+      actionKey: "complete_initial_snapshot",
+    };
+  }
+
+  if (state.projects.length === 0) {
+    return {
+      title: "Dar destino ao fluxo",
+      message: "Crie um primeiro projeto de vida para dar destino ao seu fluxo financeiro.",
+      ctaLabel: "Criar projeto",
+      actionKey: "create_first_life_project",
+    };
+  }
+
+  const security = buildAuroraReservoirs(state).find((reservoir) => reservoir.type === "security");
+  if (security && security.progressPercent < 30) {
+    return {
+      title: "Fortalecer Segurança",
+      message: "Defina um aporte mensal para fortalecer sua Segurança e reduzir vulnerabilidade a imprevistos.",
+      ctaLabel: "Definir aporte",
+      actionKey: "define_security_contribution",
+    };
+  }
+
+  if (state.flow.monthlyInvestments === 0) {
+    return {
+      title: "Começar construção de futuro",
+      message: "Escolha um valor pequeno para começar a alimentar um reservatório neste mês.",
+      ctaLabel: "Escolher valor",
+      actionKey: "start_small_contribution",
+    };
+  }
+
+  if (state.flow.monthlyBalance > 0) {
+    return {
+      title: "Direcionar saldo positivo",
+      message: "Direcione parte do seu saldo para um projeto de vida antes que ele vire sobra sem destino.",
+      ctaLabel: "Direcionar saldo",
+      actionKey: "allocate_positive_balance",
+    };
+  }
+
+  return {
+    title: "Manter rotina",
+    message: "Mantenha sua rotina: acompanhe o fluxo, proteja seus reservatórios e preserve aportes possíveis.",
+    ctaLabel: "Continuar",
+    actionKey: "maintain_mvp_routine",
   };
 }

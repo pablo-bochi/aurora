@@ -1,6 +1,8 @@
 import { type ChangeEvent, type CSSProperties, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { DiagnosisCard } from "../components/aurora/DiagnosisCard";
+import { FlowMapCard } from "../components/aurora/FlowMapCard";
 import { GoalProgressCard } from "../components/aurora/GoalProgressCard";
 import { NextActionCard } from "../components/aurora/NextActionCard";
 import { ScoreCard } from "../components/aurora/ScoreCard";
@@ -15,9 +17,13 @@ import {
   saveCsvImportSession,
 } from "../integrations/csv-import/csv-import-store";
 import type { CsvImportSessionState } from "../integrations/csv-import/csv-types";
+import { auroraMvpStateToAuroraUserState, buildAuroraReservoirs } from "../lib/aurora-mvp-adapter";
+import { loadAuroraMvpState } from "../lib/aurora-mvp-storage";
 import { buildHomeSnapshot } from "../lib/engines/home-orchestrator";
 import { calculateFinancialHealthScoreV3 } from "../lib/engines/financial-health-engine";
+import { calculateMvpNextAction } from "../lib/engines/next-action-engine";
 import { auroraUserStateMock } from "../mocks/aurora-user-state";
+import type { AuroraMvpState, FlowInput } from "../types/aurora-mvp";
 import type { GoalState } from "../types/aurora-user-state";
 import type { GoalProgress } from "../types/objectives-v2";
 
@@ -90,11 +96,29 @@ function mapGoalStateToGoalProgress(goal: GoalState): GoalProgress {
 
 export default function HomePageV2() {
   const [importSession, setImportSession] = useState<CsvImportSessionState>(() => getCsvImportSession());
+  const [mvpState] = useState<AuroraMvpState | null>(() => loadAuroraMvpState());
   const [importInfo, setImportInfo] = useState<string>("");
 
-  const activeState = importSession.mode === "imported" ? importSession.consolidatedUserState : auroraUserStateMock;
+  const activeState =
+    importSession.mode === "imported"
+      ? importSession.consolidatedUserState
+      : mvpState
+        ? auroraMvpStateToAuroraUserState(mvpState)
+        : auroraUserStateMock;
   const snapshot = useMemo(() => buildHomeSnapshot(activeState), [activeState]);
   const score = useMemo(() => calculateFinancialHealthScoreV3(activeState), [activeState]);
+  const flow: FlowInput = useMemo(
+    () =>
+      mvpState?.flow ?? {
+        monthlyIncome: activeState.monthly.income,
+        monthlyExpenses: activeState.monthly.expenses,
+        monthlyInvestments: activeState.goals.reduce((acc, goal) => acc + goal.contributionThisMonth, 0),
+        monthlyBalance: activeState.monthly.balance,
+      },
+    [activeState, mvpState]
+  );
+  const reservoirs = useMemo(() => (mvpState ? buildAuroraReservoirs(mvpState) : []), [mvpState]);
+  const mvpNextAction = useMemo(() => calculateMvpNextAction(mvpState), [mvpState]);
 
   const priorityGoal = snapshot.priorityGoal ? mapGoalStateToGoalProgress(snapshot.priorityGoal) : null;
   const alerts = snapshot.alerts.map((message, index) => ({
@@ -134,8 +158,8 @@ export default function HomePageV2() {
     <main style={pageStyle}>
       <div style={contentStyle}>
         <SectionHeader
-          title={`Resumo executivo · ${importSession.mode === "imported" ? "Dados importados" : "Pat"}`}
-          subtitle="Clareza rápida do seu mês: posição atual, riscos imediatos e um único próximo passo."
+          title={`Resumo executivo · ${importSession.mode === "imported" ? "Dados importados" : mvpState ? "Snapshot MVP" : "Pat"}`}
+          subtitle="Clareza rápida do seu fluxo: posição atual, reservatórios e uma única próxima ação."
         />
 
         <section style={cardStyle} aria-label="CsvImportTriggerCard">
@@ -216,7 +240,43 @@ export default function HomePageV2() {
 
         <DiagnosisCard title={snapshot.diagnosisTitle} message={snapshot.diagnosisMessage} updatedAt={score.updatedAt} />
 
+        <FlowMapCard flow={flow} />
+
         <ScoreCard score={score.totalScore} bandLabel={score.band.label} message={score.band.message} />
+
+        <section style={cardStyle} aria-label="ReservoirsCard">
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center" }}>
+            <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Reservatórios iniciais</h3>
+            <Link to="/reservoirs" style={{ color: "#16385d", fontWeight: 700, fontSize: "0.88rem" }}>
+              Ver todos
+            </Link>
+          </div>
+          {reservoirs.length > 0 ? (
+            reservoirs.slice(0, 3).map((reservoir) => (
+              <div key={reservoir.id} style={{ borderTop: "1px solid #edf2f7", paddingTop: 10, display: "grid", gap: 6 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                  <p style={{ margin: 0, color: "#162a46", fontWeight: 700 }}>{reservoir.name}</p>
+                  <p style={{ margin: 0, color: "#4f6480", fontSize: "0.88rem" }}>{reservoir.progressPercent}%</p>
+                </div>
+                <div style={{ width: "100%", height: 8, borderRadius: 999, background: "#e8eff7" }}>
+                  <div
+                    style={{
+                      width: `${reservoir.progressPercent}%`,
+                      height: "100%",
+                      borderRadius: 999,
+                      background: "linear-gradient(90deg, #2d6fb1, #5c8fc4)",
+                    }}
+                  />
+                </div>
+                <p style={{ margin: 0, color: "#4f6480", fontSize: "0.9rem", lineHeight: 1.45 }}>{reservoir.message}</p>
+              </div>
+            ))
+          ) : (
+            <p style={{ margin: 0, color: "#405975", lineHeight: 1.5 }}>
+              Complete o snapshot inicial para gerar Segurança e Liberdade automaticamente.
+            </p>
+          )}
+        </section>
 
         <section style={cardStyle} aria-label="MonthlySummaryCard">
           <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Resumo financeiro do mês</h3>
@@ -266,7 +326,7 @@ export default function HomePageV2() {
         </section>
 
         {/* TODO: Integrar confirmação da ação com persistência local/remota de hábitos. */}
-        <NextActionCard actionText={snapshot.nextAction.message} ctaLabel={snapshot.nextAction.ctaLabel} />
+        <NextActionCard title={mvpNextAction.title} actionText={mvpNextAction.message} ctaLabel={mvpNextAction.ctaLabel} />
       </div>
     </main>
   );
