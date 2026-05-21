@@ -28,12 +28,15 @@ const buttonStyle: CSSProperties = {
 };
 
 export function NextActionCard({
-  title = "Próximo passo recomendado",
+  title = "Uma próxima ação",
   actionText,
-  ctaLabel = "Executar próximo passo",
+  ctaLabel = "Dar próximo passo",
 }: NextActionCardProps) {
   return (
     <article style={cardStyle}>
+      <p style={{ margin: 0, color: "#9fb8d4", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase" }}>
+        Sem pressa, um movimento por vez
+      </p>
       <h3 style={{ margin: 0, fontSize: "1.03rem", letterSpacing: "0.01em" }}>{title}</h3>
       <p style={{ margin: 0, lineHeight: 1.55, color: "#d9e6f5" }}>{actionText}</p>
       <button type="button" style={buttonStyle}>

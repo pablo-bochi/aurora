@@ -158,14 +158,14 @@ export default function HomePageV2() {
     <main style={pageStyle}>
       <div style={contentStyle}>
         <SectionHeader
-          title={`Resumo executivo · ${importSession.mode === "imported" ? "Dados importados" : mvpState ? "Snapshot MVP" : "Pat"}`}
-          subtitle="Clareza rápida do seu fluxo: posição atual, reservatórios e uma única próxima ação."
+          title="Sua clareza de hoje"
+          subtitle="Uma síntese rápida do seu fluxo, do que ele está construindo e do próximo movimento possível."
         />
 
         <section style={cardStyle} aria-label="CsvImportTriggerCard">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Importar CSV Nubank</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Aprofundar com CSV, se quiser</h3>
           <p style={{ margin: 0, color: "#405975", lineHeight: 1.5 }}>
-            Você pode importar vários arquivos na mesma sessão. Os dados são consolidados automaticamente.
+            O snapshot já basta para começar. O CSV é opcional para trazer mais precisão quando fizer sentido.
           </p>
 
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -238,15 +238,11 @@ export default function HomePageV2() {
           {/* TODO: Conectar importação a um fluxo persistente com histórico de múltiplos arquivos e validação assistida. */}
         </section>
 
-        <DiagnosisCard title={snapshot.diagnosisTitle} message={snapshot.diagnosisMessage} updatedAt={score.updatedAt} />
-
         <FlowMapCard flow={flow} />
-
-        <ScoreCard score={score.totalScore} bandLabel={score.band.label} message={score.band.message} />
 
         <section style={cardStyle} aria-label="ReservoirsCard">
           <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center" }}>
-            <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Reservatórios iniciais</h3>
+            <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>O que seu dinheiro está construindo</h3>
             <Link to="/reservoirs" style={{ color: "#16385d", fontWeight: 700, fontSize: "0.88rem" }}>
               Ver todos
             </Link>
@@ -273,13 +269,19 @@ export default function HomePageV2() {
             ))
           ) : (
             <p style={{ margin: 0, color: "#405975", lineHeight: 1.5 }}>
-              Complete o snapshot inicial para gerar Segurança e Liberdade automaticamente.
+              Complete sua primeira leitura para ver Segurança e Liberdade como construções de vida, não só metas.
             </p>
           )}
         </section>
 
+        <NextActionCard title={mvpNextAction.title} actionText={mvpNextAction.message} ctaLabel={mvpNextAction.ctaLabel} />
+
+        <ScoreCard score={score.totalScore} bandLabel={score.band.label} message={score.band.message} />
+
+        <DiagnosisCard title="Leitura inicial da Aurora" message={snapshot.diagnosisMessage} updatedAt={score.updatedAt} />
+
         <section style={cardStyle} aria-label="MonthlySummaryCard">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Resumo financeiro do mês</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Números de apoio</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 8 }}>
             <div style={metricItemStyle}>
               <span style={{ color: "#5b708b", fontSize: "0.78rem" }}>Entradas</span>
@@ -299,18 +301,18 @@ export default function HomePageV2() {
         </section>
 
         <section style={cardStyle} aria-label="GoalsCard">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Objetivo prioritário</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Projeto em foco</h3>
           {priorityGoal ? (
             <GoalProgressCard goal={priorityGoal} />
           ) : (
             <p style={{ margin: 0, color: "#405975", lineHeight: 1.5 }}>
-              Nenhum objetivo ativo encontrado. Definir um objetivo habilita recomendações mais precisas.
+              Quando você cria um projeto, o Aurora consegue conectar seu fluxo a um destino mais claro.
             </p>
           )}
         </section>
 
         <section style={cardStyle} aria-label="AlertsCard">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Sinais que merecem atenção</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Sinais para observar com calma</h3>
           {alerts.map((alert) => (
             <p
               key={alert.id}
@@ -324,9 +326,6 @@ export default function HomePageV2() {
             </p>
           ))}
         </section>
-
-        {/* TODO: Integrar confirmação da ação com persistência local/remota de hábitos. */}
-        <NextActionCard title={mvpNextAction.title} actionText={mvpNextAction.message} ctaLabel={mvpNextAction.ctaLabel} />
       </div>
     </main>
   );

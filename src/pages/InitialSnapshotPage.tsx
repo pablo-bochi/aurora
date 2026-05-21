@@ -29,6 +29,11 @@ const cardStyle: CSSProperties = {
   boxShadow: "0 8px 20px rgba(16, 35, 63, 0.04)",
 };
 
+const softCardStyle: CSSProperties = {
+  ...cardStyle,
+  background: "linear-gradient(155deg, #ffffff 0%, #f5f9fd 100%)",
+};
+
 const fieldStyle: CSSProperties = {
   display: "grid",
   gap: 6,
@@ -99,52 +104,104 @@ export default function InitialSnapshotPage() {
     <main style={pageStyle}>
       <div style={contentStyle}>
         <SectionHeader
-          title="Snapshot inicial"
-          subtitle="Comece com uma visão simples. Você não precisa organizar tudo agora. Informe alguns números aproximados para o Aurora gerar sua primeira leitura."
+          title="Sua primeira leitura"
+          subtitle="Comece pequeno. Alguns números aproximados já são suficientes para o Aurora transformar confusão em clareza."
         />
 
+        <section style={softCardStyle} aria-label="SnapshotIntro">
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Não precisa estar perfeito</h3>
+          <p style={{ margin: 0, color: "#405975", lineHeight: 1.55 }}>
+            Esta etapa não é uma planilha. É só um ponto de partida para entender seu fluxo, sua segurança atual e o que
+            seu dinheiro pode começar a construir.
+          </p>
+        </section>
+
         <form style={cardStyle} onSubmit={handleSubmit}>
+          <section style={{ display: "grid", gap: 10 }}>
+            <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Seu fluxo de um mês comum</h3>
+            <p style={{ margin: 0, color: "#58708c", lineHeight: 1.5, fontSize: "0.9rem" }}>
+              Use estimativas tranquilas. Você pode refinar tudo depois.
+            </p>
+          </section>
+
           <label style={fieldStyle}>
-            <span style={labelStyle}>Renda mensal aproximada</span>
-            <input style={inputStyle} type="number" min="0" value={monthlyIncome} onChange={(event) => setMonthlyIncome(event.target.value)} />
+            <span style={labelStyle}>Quanto costuma entrar por mês?</span>
+            <input
+              style={inputStyle}
+              type="number"
+              min="0"
+              value={monthlyIncome}
+              onChange={(event) => setMonthlyIncome(event.target.value)}
+              placeholder="Pode ser aproximado"
+            />
           </label>
 
           <label style={fieldStyle}>
-            <span style={labelStyle}>Gastos mensais aproximados</span>
-            <input style={inputStyle} type="number" min="0" value={monthlyExpenses} onChange={(event) => setMonthlyExpenses(event.target.value)} />
+            <span style={labelStyle}>Quanto costuma sair em gastos?</span>
+            <input
+              style={inputStyle}
+              type="number"
+              min="0"
+              value={monthlyExpenses}
+              onChange={(event) => setMonthlyExpenses(event.target.value)}
+              placeholder="Essenciais e variáveis juntos"
+            />
           </label>
 
           <label style={fieldStyle}>
-            <span style={labelStyle}>Investimentos mensais</span>
-            <input style={inputStyle} type="number" min="0" value={monthlyInvestments} onChange={(event) => setMonthlyInvestments(event.target.value)} />
+            <span style={labelStyle}>Quanto você costuma guardar ou investir?</span>
+            <input
+              style={inputStyle}
+              type="number"
+              min="0"
+              value={monthlyInvestments}
+              onChange={(event) => setMonthlyInvestments(event.target.value)}
+              placeholder="Se ainda não sabe, deixe em branco"
+            />
           </label>
 
+          <section style={{ borderTop: "1px solid #edf2f7", paddingTop: 12, display: "grid", gap: 10 }}>
+            <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>O que já está construído</h3>
+            <p style={{ margin: 0, color: "#58708c", lineHeight: 1.5, fontSize: "0.9rem" }}>
+              Esses valores ajudam o Aurora a criar seus primeiros reservatórios de Segurança e Liberdade.
+            </p>
+          </section>
+
           <label style={fieldStyle}>
-            <span style={labelStyle}>Reserva atual</span>
+            <span style={labelStyle}>Quanto existe hoje para emergências?</span>
             <input
               style={inputStyle}
               type="number"
               min="0"
               value={currentEmergencyReserve}
               onChange={(event) => setCurrentEmergencyReserve(event.target.value)}
+              placeholder="Sua reserva atual"
             />
           </label>
 
           <label style={fieldStyle}>
-            <span style={labelStyle}>Investimentos atuais</span>
-            <input style={inputStyle} type="number" min="0" value={currentInvestments} onChange={(event) => setCurrentInvestments(event.target.value)} />
+            <span style={labelStyle}>Quanto existe hoje investido?</span>
+            <input
+              style={inputStyle}
+              type="number"
+              min="0"
+              value={currentInvestments}
+              onChange={(event) => setCurrentInvestments(event.target.value)}
+              placeholder="Investimentos fora da reserva"
+            />
           </label>
 
           <section style={{ borderTop: "1px solid #edf2f7", paddingTop: 12, display: "grid", gap: 10 }}>
+            <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Um destino possível</h3>
             <p style={{ margin: 0, color: "#405975", lineHeight: 1.5 }}>
-              Primeiro projeto de vida opcional. Você pode criar e refinar outros projetos depois.
+              Se já existe algo que você quer construir, registre só o nome. Isso pode ser refinado depois.
             </p>
             <label style={fieldStyle}>
-              <span style={labelStyle}>Nome do projeto</span>
+              <span style={labelStyle}>Primeiro projeto de vida opcional</span>
               <input style={inputStyle} value={projectName} onChange={(event) => setProjectName(event.target.value)} placeholder="Ex.: viagem, apartamento, transição de carreira" />
             </label>
             <label style={fieldStyle}>
-              <span style={labelStyle}>Tipo</span>
+              <span style={labelStyle}>O que esse projeto representa?</span>
               <select style={inputStyle} value={projectType} onChange={(event) => setProjectType(event.target.value as ReservoirType)}>
                 <option value="autonomy">Autonomia</option>
                 <option value="security">Segurança</option>
@@ -166,7 +223,7 @@ export default function InitialSnapshotPage() {
               cursor: "pointer",
             }}
           >
-            Gerar minha primeira leitura
+            Ver minha primeira leitura
           </button>
         </form>
       </div>

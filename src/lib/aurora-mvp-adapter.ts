@@ -29,18 +29,18 @@ export function getFlowInterpretation(flow: FlowInput): string {
   const ratios = calculateFlowRatios(flow);
 
   if (flow.monthlyExpenses > flow.monthlyIncome) {
-    return "Seu fluxo está pressionado: as saídas superam as entradas neste mês.";
+    return "Seu fluxo pede cuidado neste momento: as saídas ficaram acima das entradas.";
   }
 
   if (flow.monthlyBalance > 0 && ratios.investmentRate < 0.08) {
-    return "Existe espaço para transformar parte do saldo em construção de futuro.";
+    return "Existe espaço para transformar parte do saldo em construção de futuro, no seu ritmo.";
   }
 
   if (flow.monthlyInvestments > 0) {
     return "Você já direciona parte do seu fluxo para construção de futuro.";
   }
 
-  return "Seu fluxo ainda está sendo consumido principalmente no presente.";
+  return "Hoje, a maior parte do seu fluxo está cuidando do presente. O próximo passo pode ser pequeno.";
 }
 
 export function buildDefaultSecurityReservoir(state: AuroraMvpState): AuroraReservoir {
@@ -57,7 +57,7 @@ export function buildDefaultSecurityReservoir(state: AuroraMvpState): AuroraRese
     monthlyContribution: 0,
     progressPercent,
     source: "default",
-    message: "Sua Segurança representa a capacidade de lidar com imprevistos sem perder tranquilidade.",
+    message: "Sua Segurança é o espaço que protege sua vida de imprevistos e reduz a pressão do presente.",
   };
 }
 
@@ -73,7 +73,7 @@ export function buildDefaultFreedomReservoir(state: AuroraMvpState): AuroraReser
     monthlyContribution: safeNumber(state.flow.monthlyInvestments),
     progressPercent: 0,
     source: "default",
-    message: "Sua Liberdade representa a construção de autonomia financeira de longo prazo.",
+    message: "Sua Liberdade mostra o quanto seu dinheiro já começou a trabalhar por escolhas futuras.",
   };
 }
 
@@ -93,7 +93,7 @@ function projectToReservoir(project: LifeProjectInput): AuroraReservoir {
     priority: project.priority,
     progressPercent,
     source: "project",
-    message: "Este projeto transforma parte do seu fluxo em construção concreta de vida.",
+    message: "Este reservatório conecta dinheiro a uma escolha de vida que importa para você.",
   };
 }
 

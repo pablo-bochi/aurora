@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
-import { BrowserRouter, NavLink, Navigate, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import ConversationalPageV2 from "./pages/ConversationalPageV2";
 import FinancialHealthPageV3 from "./pages/FinancialHealthPageV3";
@@ -47,9 +48,20 @@ const baseButtonStyle: CSSProperties = {
   cursor: "pointer",
 };
 
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, [location.pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <nav style={navStyle}>
         {pages.map((item) => (
           <NavLink

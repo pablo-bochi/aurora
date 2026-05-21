@@ -62,11 +62,11 @@ export default function FinancialHealthPageV3() {
       <div style={contentStyle}>
         <SectionHeader
           title={`Score de Inteligência Financeira · ${score.totalScore}/100`}
-          subtitle={`Resultado calculado por regras em três dimensões: ${score.psychologicalProfile.label}.`}
+          subtitle={`Uma leitura de evolução, não um julgamento. Perfil atual: ${score.psychologicalProfile.label}.`}
         />
 
         <section style={cardStyle} aria-label="ScoreMeaning">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>O que este score significa</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Um espelho, não uma nota</h3>
           <p style={{ margin: 0, color: "#3f5873", lineHeight: 1.55 }}>
             Seu score não mede riqueza. Ele ajuda você a entender se sua relação com dinheiro está evoluindo de forma
             mais consciente, sustentável e alinhada aos seus objetivos.
@@ -82,7 +82,7 @@ export default function FinancialHealthPageV3() {
         ) : null}
 
         <section style={cardStyle} aria-label="score header">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Como interpretar seu score</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Como ler este momento</h3>
           <p style={{ margin: 0, color: "#3f5873", lineHeight: 1.55 }}>{scoreSummary}</p>
         </section>
 
@@ -91,7 +91,7 @@ export default function FinancialHealthPageV3() {
         <PsychologicalProfileCard profile={score.psychologicalProfile} />
 
         <section style={cardStyle} aria-label="FactorsList">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Fatores que explicam o resultado</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Sinais que formam esta leitura</h3>
           {factors.map((factor) => (
             <div key={factor.id} style={{ borderTop: "1px solid #edf2f7", paddingTop: 10, display: "grid", gap: 6 }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
@@ -107,7 +107,7 @@ export default function FinancialHealthPageV3() {
         </section>
 
         <section style={cardStyle} aria-label="RecommendationsList">
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Recomendações prioritárias</h3>
+          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Movimentos possíveis</h3>
           <ul style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 8, color: "#3e5874", lineHeight: 1.5 }}>
             {score.recommendations.map((recommendation) => (
               <li key={recommendation}>{recommendation}</li>

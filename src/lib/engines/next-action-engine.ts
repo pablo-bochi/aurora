@@ -68,18 +68,18 @@ export function calculateNextAction(state: AuroraUserState): NextAction {
 export function calculateMvpNextAction(state: AuroraMvpState | null): NextAction {
   if (!state?.hasCompletedInitialSnapshot) {
     return {
-      title: "Completar ponto de partida",
-      message: "Complete seu snapshot inicial para gerar uma leitura mais clara do seu fluxo financeiro.",
-      ctaLabel: "Completar snapshot",
+      title: "Começar com leveza",
+      message: "Preencha poucos números aproximados para o Aurora gerar uma primeira leitura clara, sem precisar organizar tudo agora.",
+      ctaLabel: "Fazer primeira leitura",
       actionKey: "complete_initial_snapshot",
     };
   }
 
   if (state.projects.length === 0) {
     return {
-      title: "Dar destino ao fluxo",
-      message: "Crie um primeiro projeto de vida para dar destino ao seu fluxo financeiro.",
-      ctaLabel: "Criar projeto",
+      title: "Escolher um destino",
+      message: "Crie um primeiro projeto de vida para seu fluxo começar a construir algo concreto.",
+      ctaLabel: "Criar projeto de vida",
       actionKey: "create_first_life_project",
     };
   }
@@ -87,34 +87,34 @@ export function calculateMvpNextAction(state: AuroraMvpState | null): NextAction
   const security = buildAuroraReservoirs(state).find((reservoir) => reservoir.type === "security");
   if (security && security.progressPercent < 30) {
     return {
-      title: "Fortalecer Segurança",
-      message: "Defina um aporte mensal para fortalecer sua Segurança e reduzir vulnerabilidade a imprevistos.",
-      ctaLabel: "Definir aporte",
+      title: "Cuidar da Segurança",
+      message: "Escolha um aporte possível para fortalecer sua Segurança aos poucos e ganhar mais tranquilidade.",
+      ctaLabel: "Definir próximo aporte",
       actionKey: "define_security_contribution",
     };
   }
 
   if (state.flow.monthlyInvestments === 0) {
     return {
-      title: "Começar construção de futuro",
-      message: "Escolha um valor pequeno para começar a alimentar um reservatório neste mês.",
-      ctaLabel: "Escolher valor",
+      title: "Abrir espaço para o futuro",
+      message: "Escolha um valor pequeno e confortável para começar a alimentar um reservatório neste mês.",
+      ctaLabel: "Escolher valor possível",
       actionKey: "start_small_contribution",
     };
   }
 
   if (state.flow.monthlyBalance > 0) {
     return {
-      title: "Direcionar saldo positivo",
-      message: "Direcione parte do seu saldo para um projeto de vida antes que ele vire sobra sem destino.",
-      ctaLabel: "Direcionar saldo",
+      title: "Dar intenção ao saldo",
+      message: "Direcione uma parte do saldo para um projeto de vida e transforme sobra em construção.",
+      ctaLabel: "Escolher destino",
       actionKey: "allocate_positive_balance",
     };
   }
 
   return {
     title: "Manter rotina",
-    message: "Mantenha sua rotina: acompanhe o fluxo, proteja seus reservatórios e preserve aportes possíveis.",
+    message: "Mantenha o ritmo atual: acompanhe seu fluxo, proteja seus reservatórios e preserve aportes possíveis.",
     ctaLabel: "Continuar",
     actionKey: "maintain_mvp_routine",
   };

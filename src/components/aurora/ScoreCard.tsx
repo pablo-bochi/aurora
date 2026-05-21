@@ -46,8 +46,8 @@ export function ScoreCard({ score, bandLabel, message }: ScoreCardProps) {
       <p style={scoreStyle}>{score}/100</p>
       <p style={messageStyle}>{message}</p>
       <p style={messageStyle}>
-        Seu score não mede riqueza. Ele ajuda você a entender se sua relação com dinheiro está evoluindo de forma mais
-        consciente, sustentável e alinhada aos seus objetivos.
+        Este número é um espelho de evolução, não uma nota de riqueza. Ele indica se sua relação com dinheiro está
+        ganhando clareza, sustentabilidade e conexão com seus objetivos.
       </p>
     </article>
   );

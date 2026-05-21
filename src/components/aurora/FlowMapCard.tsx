@@ -48,7 +48,7 @@ export function FlowMapCard({ flow }: FlowMapCardProps) {
       <div style={{ display: "grid", gap: 4 }}>
         <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>Mapa do Fluxo</h3>
         <p style={{ margin: 0, color: "#4f6480", lineHeight: 1.5 }}>
-          Veja como sua renda mensal se distribui entre gastos, investimentos e resultado.
+          Uma leitura simples de como sua energia financeira se distribui entre presente, futuro e espaço de escolha.
         </p>
       </div>
 
@@ -75,10 +75,10 @@ export function FlowMapCard({ flow }: FlowMapCardProps) {
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <span style={{ color: "#35506b", fontWeight: 700, fontSize: "0.88rem" }}>
-          Gastos: {formatPercent(ratios.expenseRate)}
+          Presente: {formatPercent(ratios.expenseRate)}
         </span>
         <span style={{ color: "#35506b", fontWeight: 700, fontSize: "0.88rem" }}>
-          Investimentos: {formatPercent(ratios.investmentRate)}
+          Futuro: {formatPercent(ratios.investmentRate)}
         </span>
       </div>
 

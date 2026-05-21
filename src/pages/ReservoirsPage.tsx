@@ -40,13 +40,15 @@ export default function ReservoirsPage() {
     <main style={pageStyle}>
       <div style={contentStyle}>
         <SectionHeader
-          title="Reservatórios"
-          subtitle="Reservatórios transformam seu fluxo em segurança, autonomia e liberdade."
+          title="Reservatórios de vida"
+          subtitle="Aqui, dinheiro vira proteção, escolhas e futuro. Cada reservatório mostra uma construção em andamento."
         />
 
         {!state ? (
           <section style={cardStyle}>
-            <p style={{ margin: 0, color: "#405975" }}>Complete o snapshot inicial para gerar seus primeiros reservatórios.</p>
+            <p style={{ margin: 0, color: "#405975" }}>
+              Complete sua primeira leitura para o Aurora criar Segurança e Liberdade a partir do seu ponto de partida.
+            </p>
             <Link to="/snapshot" style={{ color: "#16385d", fontWeight: 700 }}>
               Completar snapshot inicial
             </Link>
@@ -57,7 +59,9 @@ export default function ReservoirsPage() {
           <article key={reservoir.id} style={cardStyle}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center" }}>
               <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>{reservoir.name}</h3>
-              <span style={{ color: "#5b708b", fontSize: "0.82rem", fontWeight: 700 }}>{reservoir.type}</span>
+              <span style={{ color: "#5b708b", fontSize: "0.82rem", fontWeight: 700 }}>
+                {reservoir.type === "security" ? "Proteção" : reservoir.type === "freedom" ? "Liberdade futura" : "Autonomia"}
+              </span>
             </div>
             <div style={{ width: "100%", height: 8, borderRadius: 999, background: "#e8eff7" }}>
               <div
@@ -73,6 +77,11 @@ export default function ReservoirsPage() {
               {formatCurrency(reservoir.currentAmount)}
               {reservoir.targetAmount ? ` de ${formatCurrency(reservoir.targetAmount)} (${reservoir.progressPercent}%)` : ""}
             </p>
+            {reservoir.monthlyContribution > 0 ? (
+              <p style={{ margin: 0, color: "#58708c", fontSize: "0.9rem" }}>
+                Recebendo {formatCurrency(reservoir.monthlyContribution)} por mês.
+              </p>
+            ) : null}
             <p style={{ margin: 0, color: "#4f6480", lineHeight: 1.5 }}>{reservoir.message}</p>
           </article>
         ))}

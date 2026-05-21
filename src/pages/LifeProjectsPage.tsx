@@ -117,13 +117,13 @@ export default function LifeProjectsPage() {
       <div style={contentStyle}>
         <SectionHeader
           title="Projetos de vida"
-          subtitle="Projetos de vida são destinos para o seu fluxo financeiro. Eles ajudam você a transformar dinheiro em segurança, autonomia e liberdade."
+          subtitle="Projetos dão destino ao seu fluxo. Você pode começar só com uma intenção e completar os detalhes depois."
         />
 
         {!mvpState.hasCompletedInitialSnapshot ? (
           <section style={cardStyle}>
             <p style={{ margin: 0, color: "#405975", lineHeight: 1.5 }}>
-              Para conectar projetos ao seu fluxo, complete primeiro o snapshot inicial.
+              Para conectar projetos ao seu fluxo com mais clareza, complete primeiro sua leitura inicial.
             </p>
             <Link to="/snapshot" style={{ color: "#16385d", fontWeight: 700 }}>
               Completar snapshot inicial
@@ -132,8 +132,13 @@ export default function LifeProjectsPage() {
         ) : null}
 
         <form style={cardStyle} onSubmit={handleSubmit}>
-          <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>{editingId ? "Editar projeto" : "Criar projeto"}</h3>
-          <input style={inputStyle} value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} placeholder="Nome do projeto" />
+          <div style={{ display: "grid", gap: 4 }}>
+            <h3 style={{ margin: 0, color: "#152c49", fontSize: "1rem" }}>{editingId ? "Ajustar projeto" : "Criar um destino"}</h3>
+            <p style={{ margin: 0, color: "#58708c", lineHeight: 1.45, fontSize: "0.9rem" }}>
+              O nome já basta para começar. Valores, prazo e aporte podem amadurecer com o tempo.
+            </p>
+          </div>
+          <input style={inputStyle} value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} placeholder="O que você quer construir?" />
           <select style={inputStyle} value={draft.type} onChange={(event) => setDraft({ ...draft, type: event.target.value as ReservoirType })}>
             <option value="security">Segurança</option>
             <option value="autonomy">Autonomia</option>
@@ -145,7 +150,7 @@ export default function LifeProjectsPage() {
             min="0"
             value={draft.targetAmount ?? ""}
             onChange={(event) => setDraft({ ...draft, targetAmount: toNumber(event.target.value) })}
-            placeholder="Valor alvo"
+            placeholder="Valor alvo, se já souber"
           />
           <input
             style={inputStyle}
@@ -153,7 +158,7 @@ export default function LifeProjectsPage() {
             min="0"
             value={draft.currentAmount ?? ""}
             onChange={(event) => setDraft({ ...draft, currentAmount: toNumber(event.target.value) })}
-            placeholder="Valor atual"
+            placeholder="Valor atual já separado"
           />
           <input
             style={inputStyle}
@@ -161,7 +166,7 @@ export default function LifeProjectsPage() {
             min="0"
             value={draft.monthlyContribution ?? ""}
             onChange={(event) => setDraft({ ...draft, monthlyContribution: toNumber(event.target.value) })}
-            placeholder="Aporte mensal"
+            placeholder="Aporte mensal possível"
           />
           <input
             style={inputStyle}
@@ -178,14 +183,16 @@ export default function LifeProjectsPage() {
             placeholder="Prioridade"
           />
           <button type="submit" style={{ border: "none", borderRadius: 12, padding: "11px 14px", background: "#16385d", color: "#fff", fontWeight: 700, justifySelf: "start" }}>
-            {editingId ? "Salvar edição" : "Criar projeto"}
+            {editingId ? "Salvar ajuste" : "Criar destino"}
           </button>
         </form>
 
         <section style={{ display: "grid", gap: 10 }}>
           {sortedProjects.length === 0 ? (
             <article style={cardStyle}>
-              <p style={{ margin: 0, color: "#405975" }}>Nenhum projeto criado. Crie um primeiro destino para o seu fluxo.</p>
+              <p style={{ margin: 0, color: "#405975" }}>
+                Nenhum projeto criado ainda. Um primeiro destino já ajuda seu dinheiro a ganhar direção.
+              </p>
             </article>
           ) : (
             sortedProjects.map((project) => (
