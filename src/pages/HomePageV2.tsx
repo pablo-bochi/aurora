@@ -59,6 +59,14 @@ const metricItemStyle: CSSProperties = {
   gap: 4,
 };
 
+const previewTitleStyle: CSSProperties = {
+  margin: 0,
+  color: "#10233f",
+  fontSize: "2.4rem",
+  lineHeight: 1,
+  fontWeight: 800,
+};
+
 function inferAlertLevel(message: string): "info" | "warning" {
   const normalized = message.toLowerCase();
   if (
@@ -157,6 +165,8 @@ export default function HomePageV2() {
   return (
     <main style={pageStyle}>
       <div style={contentStyle}>
+        <h1 style={previewTitleStyle}>MVP2</h1>
+
         <SectionHeader
           title="Sua clareza de hoje"
           subtitle="Uma síntese rápida do seu fluxo, do que ele está construindo e do próximo movimento possível."
